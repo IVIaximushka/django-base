@@ -17,7 +17,8 @@ class Book(models.Model):
     description = models.CharField(max_length=500, default="--")
     done = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    tags = models.ManyToManyRel(BookTag)
+    tags = models.ManyToManyField(BookTag)
+    image = models.ImageField(upload_to="books/", null=True, blank=True)
 
 
 class FavouriteGenre(models.Model):
