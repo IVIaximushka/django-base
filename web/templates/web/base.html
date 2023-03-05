@@ -11,6 +11,8 @@
         {% if user.is_anonymous %}
             <a href="{% url 'authorization' %}">Авторизация</a>
             <a href="{% url 'registration' %}">Регистрация</a>
+        {% else %}
+            <a href="{% url 'logout' %}">Выйти</a>
         {% endif %}
     </nav>
     {% block content %}{% endblock %}

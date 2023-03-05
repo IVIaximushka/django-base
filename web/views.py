@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from web.forms import RegistrationForm, AuthorizationForm
 
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, logout
 
 User = get_user_model()
 
@@ -42,3 +42,8 @@ def auth_view(request):
                 login(request, user)
                 return redirect('main')
     return render(request, 'web/auth.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('main')
