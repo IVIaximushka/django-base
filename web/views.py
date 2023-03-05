@@ -14,6 +14,7 @@ def main_view(request):
 
 def registration_view(request):
     form = RegistrationForm()
+    is_success = False
     if request.method == 'POST':
         form = RegistrationForm(data=request.POST)
         if form.is_valid():
@@ -23,4 +24,8 @@ def registration_view(request):
             )
             user.set_password(form.cleaned_data['password'])
             user.save()
-    return render(request, 'web/registration.html', {'form': form})
+            is_success = True
+    return render(request, 'web/registration.html', {
+        'form': form,
+        'is_success': is_success
+    })
