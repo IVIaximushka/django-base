@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from web.forms import RegistrationForm
+from web.forms import RegistrationForm, AuthorizationForm
 
 from django.contrib.auth import get_user_model
 
@@ -29,3 +29,8 @@ def registration_view(request):
         'form': form,
         'is_success': is_success
     })
+
+
+def auth_view(request):
+    form = AuthorizationForm()
+    return render(request, 'web/auth.html', {'form': form})
