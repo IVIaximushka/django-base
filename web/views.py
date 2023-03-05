@@ -1,9 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from web.forms import RegistrationForm, AuthorizationForm
 
-from django.contrib.auth import get_user_model
-
+from django.contrib.auth import get_user_model, authenticate, login
 
 User = get_user_model()
 
@@ -33,4 +32,13 @@ def registration_view(request):
 
 def auth_view(request):
     form = AuthorizationForm()
+    if request.method == 'POST':
+        form = AuthorizationForm(data=request.POST)
+        if form.is_valid():
+            user = authenticate(**form.cleaned_data)
+            if user is None:
+                form.add_error(None, 'Введены неверные данные')
+            else:
+                login(request, user)
+                return redirect('main')
     return render(request, 'web/auth.html', {'form': form})
