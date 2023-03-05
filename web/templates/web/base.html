@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProReader</title>
+</head>
+<body>
+    <h1><a href="{% url 'main' %}">ProReader</a></h1>
+    <nav>
+        <a href="{% url 'main' %}">Главная</a>
+        {% if user.is_anonymous %}
+            <a href="{% url 'authorization' %}">Авторизация</a>
+            <a href="{% url 'registration' %}">Регистрация</a>
+        {% else %}
+            <a href="{% url 'logout' %}">Выйти</a>
+        {% endif %}
+    </nav>
+    {% block content %}{% endblock %}
+    <hr>
+</body>
+</html>
