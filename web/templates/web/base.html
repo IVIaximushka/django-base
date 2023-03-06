@@ -12,6 +12,7 @@
             <a href="{% url 'authorization' %}">Авторизация</a>
             <a href="{% url 'registration' %}">Регистрация</a>
         {% else %}
+            <a href="{% url 'book_add' %}">Добавить заметку о книге</a>
             <a href="{% url 'logout' %}">Выйти</a>
         {% endif %}
     </nav>

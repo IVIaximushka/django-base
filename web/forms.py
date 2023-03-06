@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+from web.models import Book
 
 User = get_user_model()
 
@@ -23,3 +24,13 @@ class RegistrationForm(forms.ModelForm):
 class AuthorizationForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+
+class BookNoteForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = Book
+        fields = ('title', 'author', 'genre', 'description')

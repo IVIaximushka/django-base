@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from web.forms import RegistrationForm, AuthorizationForm
+from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm
 
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
@@ -47,3 +47,13 @@ def auth_view(request):
 def logout_view(request):
     logout(request)
     return redirect('main')
+
+
+def book_add_view(request):
+    form = BookNoteForm()
+    if request.method == 'POST':
+        form = BookNoteForm(data=request.POST, initial={'user': request.user})
+        if form.is_valid():
+            form.save()
+            return redirect('main')
+    return render(request, 'web/book_note_form.html', {'form': form})
