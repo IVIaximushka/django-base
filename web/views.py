@@ -55,7 +55,7 @@ def logout_view(request):
 def book_add_view(request):
     form = BookNoteForm()
     if request.method == 'POST':
-        form = BookNoteForm(data=request.POST, initial={'user': request.user})
+        form = BookNoteForm(data=request.POST, files=request.FILES,  initial={'user': request.user})
         if form.is_valid():
             form.save()
             return redirect('main')
@@ -66,7 +66,8 @@ def book_edit_view(request, id=None):
     book_note = Book.objects.get(id=id) if id is not None else None
     form = BookNoteForm(instance=book_note)
     if request.method == 'POST':
-        form = BookNoteForm(data=request.POST, instance=book_note, initial={'user': request.user})
+        form = BookNoteForm(data=request.POST, files=request.FILES,
+                            instance=book_note, initial={'user': request.user})
         if form.is_valid():
             form.save()
             return redirect('main')
