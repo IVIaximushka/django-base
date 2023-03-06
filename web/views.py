@@ -60,3 +60,14 @@ def book_add_view(request):
             form.save()
             return redirect('main')
     return render(request, 'web/book_note_form.html', {'form': form})
+
+
+def book_edit_view(request, id=None):
+    book_note = Book.objects.get(id=id) if id is not None else None
+    form = BookNoteForm(instance=book_note)
+    if request.method == 'POST':
+        form = BookNoteForm(data=request.POST, instance=book_note, initial={'user': request.user})
+        if form.is_valid():
+            form.save()
+            return redirect('main')
+    return render(request, 'web/book_note_form.html', {'form': form})

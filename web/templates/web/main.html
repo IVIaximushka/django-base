@@ -1,8 +1,5 @@
 {% extends 'web/base.html' %}
 {% block content %}
-    {% if not user.is_anonymous %}
-        <p>Вы авторизованы как <b><i>{{ user.username }}</i></b>.</p>
-    {% endif %}
     <ul>
         {% for book_note in book_notes %}
             <li>
@@ -15,6 +12,7 @@
                 <p><i>Автор: {{ book_note.author }}</i></p>
                 <p>Жанр: {{ book_note.genre }}</p>
                 <p><small>Описание: {{ book_note.description }}</small></p>
+                <p><a href="{% url 'book_edit' book_note.id %}">Изменить</a></p>
             </li>
         {% endfor %}
     </ul>
