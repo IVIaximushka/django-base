@@ -1,14 +1,17 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm
-
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from web.models import Book
 
 User = get_user_model()
 
 
 def main_view(request):
-    return render(request, 'web/main.html')
+    book_notes = Book.objects.all()
+    return render(request, 'web/main.html', {
+        'book_notes': book_notes
+    })
 
 
 def registration_view(request):
