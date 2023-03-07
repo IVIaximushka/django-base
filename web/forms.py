@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from web.models import Book
+from web.models import Book, BookTag
 
 User = get_user_model()
 
@@ -34,3 +34,13 @@ class BookNoteForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ('title', 'author', 'genre', 'description', 'done', 'image')
+
+
+class BookTagForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = BookTag
+        fields = ('title',)

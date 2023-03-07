@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
-from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm
+from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm
 from web.models import Book, BookTag
 
 User = get_user_model()
@@ -76,4 +76,10 @@ def book_edit_view(request, id=None):
 
 def tags_view(request):
     tags = BookTag.objects.all()
-    return render(request, 'web/tags.html', {'tags': tags})
+    form = BookTagForm()
+    if request.method == 'POST':
+        form = BookTagForm(data = request.POST, initial={'user': request.user})
+        if form.is_valid():
+            form.save()
+            form = BookTagForm()
+    return render(request, 'web/tags.html', {'tags': tags, 'form': form})

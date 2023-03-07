@@ -6,4 +6,10 @@
             <li>{{ tag.title }}</li>
         {% endfor %}
     </ul>
+    <h3>Добавить тег</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Добавить тег</button>
+    </form>
 {% endblock %}
