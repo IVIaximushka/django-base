@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
+from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm
 from web.models import Book, BookTag, FavouriteGenre
 
@@ -10,7 +11,8 @@ User = get_user_model()
 def main_view(request):
     book_notes = Book.objects.all().order_by('title')
     return render(request, 'web/main.html', {
-        'book_notes': book_notes
+        'book_notes': book_notes,
+        'MEDIA_ROOT': MEDIA_ROOT
     })
 
 
