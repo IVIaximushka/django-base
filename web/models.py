@@ -9,6 +9,9 @@ class BookTag(models.Model):
     title = models.CharField(max_length=30, verbose_name='Название')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
+    def __str__(self):
+        return self.title
+
 
 class Book(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')

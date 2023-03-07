@@ -33,7 +33,7 @@ class BookNoteForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ('title', 'author', 'genre', 'description', 'done', 'image')
+        fields = ('title', 'author', 'genre', 'description', 'done', 'image', 'tags')
 
 
 class BookTagForm(forms.ModelForm):
