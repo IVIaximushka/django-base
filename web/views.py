@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 def main_view(request):
-    book_notes = Book.objects.all()
+    book_notes = Book.objects.all().order_by('title')
     return render(request, 'web/main.html', {
         'book_notes': book_notes
     })
@@ -75,7 +75,7 @@ def book_edit_view(request, id=None):
 
 
 def _list_editor_view(request, model_cls, form_cls, template_name, url_name):
-    items = model_cls.objects.all()
+    items = model_cls.objects.all().order_by('title')
     form = form_cls()
     if request.method == 'POST':
         form = form_cls(data=request.POST, initial={'user': request.user})
