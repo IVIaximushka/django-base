@@ -1,11 +1,19 @@
 {% extends 'web/base.html' %}
 {% block content %}
-    <h4>Добавление заметки о книге</h4>
-    <form action="{% url 'book_add' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Сохранить</button>
-    </form>
+    {% if current_book is not None %}
+        <h4>Текущая книга: {{ current_book.title }}</h4>
+        <form action="{% url 'book_check' current_book.id %}" method="post">
+            {% csrf_token %}
+            <button>Прочитать</button>
+        </form>
+    {% else %}
+        <h4>Добавление заметки о книге</h4>
+        <form action="{% url 'book_add' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Сохранить</button>
+        </form>
+    {% endif %}
     <h1>Заметки:</h1>
     <ul>
         {% for book_note in book_notes %}

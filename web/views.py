@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from proreader.settings import MEDIA_ROOT
@@ -74,7 +74,7 @@ def book_add_view(request):
 
 
 def book_edit_view(request, id=None):
-    book_note = Book.objects.get(id=id) if id is not None else None
+    book_note = get_object_or_404(Book, id=id) if id is not None else None
     form = BookNoteForm(instance=book_note)
     if request.method == 'POST':
         form = BookNoteForm(data=request.POST, files=request.FILES,
@@ -86,8 +86,16 @@ def book_edit_view(request, id=None):
 
 
 def book_delete_view(request, id):
-    book_note = Book.objects.get(id=id)
+    book_note = get_object_or_404(Book, id=id)
     book_note.delete()
+    return redirect('main')
+
+
+def book_check_view(request, id):
+    if request.method == 'POST':
+        book = get_object_or_404(Book, id=id)
+        book.done = True
+        book.save()
     return redirect('main')
 
 
@@ -110,7 +118,7 @@ def tags_view(request):
 
 
 def tags_delete_view(request, id):
-    tag = BookTag.objects.get(id=id)
+    tag = get_object_or_404(BookTag, id=id)
     tag.delete()
     return redirect('tags')
 
@@ -120,6 +128,6 @@ def genres_view(request):
 
 
 def genres_delete_view(request, id):
-    genre = FavouriteGenre.objects.get(id=id)
+    genre = get_object_or_404(FavouriteGenre, id=id)
     genre.delete()
     return redirect('genres')
