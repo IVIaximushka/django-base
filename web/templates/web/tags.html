@@ -3,7 +3,10 @@
     <h1>Книжные теги</h1>
     <ul>
         {% for tag in tags %}
-            <li>{{ tag.title }}</li>
+            <li>
+                {{ tag.title }}
+                <small><a href="{% url 'tags_delete' tag.id %}">удалить</a></small>
+            </li>
         {% endfor %}
     </ul>
     <h3>Добавить тег</h3>

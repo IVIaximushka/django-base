@@ -81,5 +81,11 @@ def tags_view(request):
         form = BookTagForm(data = request.POST, initial={'user': request.user})
         if form.is_valid():
             form.save()
-            form = BookTagForm()
+            return redirect('tags')
     return render(request, 'web/tags.html', {'tags': tags, 'form': form})
+
+
+def tags_delete_view(request, id):
+    tag = BookTag.objects.get(id=id)
+    tag.delete()
+    return redirect('tags')
