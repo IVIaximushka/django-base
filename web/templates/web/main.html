@@ -14,35 +14,37 @@
             <button>Сохранить</button>
         </form>
     {% endif %}
-    <h1>Заметки:</h1>
-    <ul>
-        {% for book_note in book_notes %}
-            <li>&nbsp
-                <table>
-                    <tr>
-                        <td>
-                            <p>
-                                <b>{{ book_note.title }}</b>
-                                {% if book_note.done == True %}
-                                    <small>(Прочитано)</small>
+    {% if book_notes|length != 0 %}
+        <h1>Заметки:</h1>
+        <ul>
+            {% for book_note in book_notes %}
+                <li>&nbsp
+                    <table>
+                        <tr>
+                            <td>
+                                <p>
+                                    <b>{{ book_note.title }}</b>
+                                    {% if book_note.done == True %}
+                                        <small>(Прочитано)</small>
+                                    {% endif %}
+                                </p>
+                                <p><i>Автор: {{ book_note.author }}</i></p>
+                                <p>Жанр: {{ book_note.genre }}</p>
+                                <p><small>Описание: {{ book_note.description }}</small></p>
+                                <p><small>
+                                    <a href="{% url 'book_edit' book_note.id %}">Изменить</a>
+                                    <a href="{% url 'book_delete' book_note.id %}">Удалить</a>
+                                </small></p>
+                            </td>
+                            <td>
+                                {% if book_note.image != '' and book_note.image is not None %}
+                                    <img src="{{ MEDIA_ROOT }}/{{ book_note.image }}">
                                 {% endif %}
-                            </p>
-                            <p><i>Автор: {{ book_note.author }}</i></p>
-                            <p>Жанр: {{ book_note.genre }}</p>
-                            <p><small>Описание: {{ book_note.description }}</small></p>
-                            <p><small>
-                                <a href="{% url 'book_edit' book_note.id %}">Изменить</a>
-                                <a href="{% url 'book_delete' book_note.id %}">Удалить</a>
-                            </small></p>
-                        </td>
-                        <td>
-                            {% if book_note.image != '' and book_note.image is not None %}
-                                <img src="{{ MEDIA_ROOT }}/{{ book_note.image }}">
-                            {% endif %}
-                        </td>
-                    </tr>
-                </table>
-            </li>
-        {% endfor %}
-    </ul>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
