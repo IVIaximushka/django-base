@@ -15,7 +15,10 @@
                             <p><i>Автор: {{ book_note.author }}</i></p>
                             <p>Жанр: {{ book_note.genre }}</p>
                             <p><small>Описание: {{ book_note.description }}</small></p>
-                            <p><a href="{% url 'book_edit' book_note.id %}">Изменить</a></p>
+                            <p><small>
+                                <a href="{% url 'book_edit' book_note.id %}">Изменить</a>
+                                <a href="{% url 'book_delete' book_note.id %}">Удалить</a>
+                            </small></p>
                         </td>
                         <td>
                             {% if book_note.image != '' and book_note.image is not None %}

@@ -20,7 +20,7 @@ class Book(models.Model):
     description = models.CharField(max_length=500, default="--", verbose_name='Описание')
     done = models.BooleanField(default=False, verbose_name='Стадия прочтения')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
-    tags = models.ManyToManyField(BookTag, verbose_name='Теги')
+    tags = models.ManyToManyField(BookTag, verbose_name='Теги', blank=True)
     image = models.ImageField(upload_to="books/", null=True, blank=True, verbose_name='Картинка')
 
 

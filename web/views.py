@@ -76,6 +76,12 @@ def book_edit_view(request, id=None):
     return render(request, 'web/book_note_form.html', {'form': form})
 
 
+def book_delete_view(request, id):
+    book_note = Book.objects.get(id=id)
+    book_note.delete()
+    return redirect('main')
+
+
 def _list_editor_view(request, model_cls, form_cls, template_name, url_name):
     items = model_cls.objects.all().order_by('title')
     form = form_cls()
