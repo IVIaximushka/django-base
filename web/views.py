@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
-from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm
-from web.models import Book, BookTag
+from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm
+from web.models import Book, BookTag, FavouriteGenre
 
 User = get_user_model()
 
@@ -74,18 +74,35 @@ def book_edit_view(request, id=None):
     return render(request, 'web/book_note_form.html', {'form': form})
 
 
-def tags_view(request):
-    tags = BookTag.objects.all()
-    form = BookTagForm()
+def _list_editor_view(request, model_cls, form_cls, template_name, url_name):
+    items = model_cls.objects.all()
+    form = form_cls()
     if request.method == 'POST':
-        form = BookTagForm(data = request.POST, initial={'user': request.user})
+        form = form_cls(data=request.POST, initial={'user': request.user})
         if form.is_valid():
             form.save()
-            return redirect('tags')
-    return render(request, 'web/tags.html', {'tags': tags, 'form': form})
+            return redirect(f'{url_name}')
+    return render(request, f'web/{template_name}.html', {
+        'items': items,
+        'form': form
+    })
+
+
+def tags_view(request):
+    return _list_editor_view(request, BookTag, BookTagForm, 'tags', 'tags')
 
 
 def tags_delete_view(request, id):
     tag = BookTag.objects.get(id=id)
     tag.delete()
     return redirect('tags')
+
+
+def genres_view(request):
+    return _list_editor_view(request, FavouriteGenre, FavouriteGenreForm, 'genres', 'genres')
+
+
+def genres_delete_view(request, id):
+    genre = FavouriteGenre.objects.get(id=id)
+    genre.delete()
+    return redirect('genres')
