@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h1>Книжные теги</h1>
+    <ul>
+        {% for item in items %}
+            <li>
+                {{ item.title }}
+                <small><a href="{% url 'tags_delete' item.id %}">удалить</a></small>
+            </li>
+        {% endfor %}
+    </ul>
+    <h3>Добавить тег</h3>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Добавить</button>
+    </form>
+{% endblock %}
