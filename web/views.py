@@ -9,10 +9,19 @@ User = get_user_model()
 
 
 def main_view(request):
+    current_book = Book.objects.filter(done=False).first()
     book_notes = Book.objects.all().order_by('title')
+    form = BookNoteForm()
+    if request.method == 'POST':
+        form = BookNoteForm(data=request.POST, files=request.FILES, initial={'user': request.user})
+        if form.is_valid():
+            form.save()
+            return redirect('main')
     return render(request, 'web/main.html', {
         'book_notes': book_notes,
-        'MEDIA_ROOT': MEDIA_ROOT
+        'MEDIA_ROOT': MEDIA_ROOT,
+        'current_book': current_book,
+        'form': form
     })
 
 
