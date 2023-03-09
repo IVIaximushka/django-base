@@ -25,7 +25,7 @@ def main_view(request):
     if filters['is_done'] is not None:
         book_notes = book_notes.filter(done=filters['is_done'])
 
-    if filters['genres'] != 'unknown':
+    if filters['genres']:
         book_notes = book_notes.filter(genre=filters['genres'])
 
     total_count = book_notes.count()

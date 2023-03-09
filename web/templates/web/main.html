@@ -20,6 +20,7 @@
             {{ field }}
         {% endfor %}
         <button>Найти</button>
+        <a href="?">Показать всё</a>
     </form>
     <small>Всего записей - {{ total_count }}. На этой странице - {{ book_notes|length }}.</small>
     {% if book_notes|length != 0 %}
