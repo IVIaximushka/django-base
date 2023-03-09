@@ -47,4 +47,15 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <nav>
+        {% if book_notes.has_previous %}
+            <a href="?page=1">В начало</a>
+            <a href="?page={{ book_notes.previous_page_number }}">Предыдущая страница</a>
+        {% endif %}
+        Страница {{ book_notes.number }} из {{ book_notes.paginator.num_pages }}
+        {% if book_notes.has_next %}
+            <a href="?page={{ book_notes.next_page_number }}">Следующая страница</a>
+            <a href="?page={{ book_notes.paginator.num_pages }}">В конец</a>
+        {% endif %}
+    </nav>
 {% endblock %}
