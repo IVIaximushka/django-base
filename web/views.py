@@ -22,6 +22,9 @@ def main_view(request):
     if filters['search']:
         book_notes = book_notes.filter(title__icontains=filters['search'])
 
+    if filters['is_done'] is not None:
+        book_notes = book_notes.filter(done=filters['is_done'])
+
     total_count = book_notes.count()
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6)

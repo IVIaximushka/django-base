@@ -58,3 +58,12 @@ class FavouriteGenreForm(forms.ModelForm):
 
 class BookNoteFilterForm(forms.Form):
     search = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Поиск'}), required=False)
+    is_done = forms.NullBooleanField(
+        widget=forms.Select(
+            choices=(
+                ('unknown', 'Процесс прочтения'),
+                ('true', 'Прочитано'),
+                ('false', 'Не прочитано')
+            )
+        )
+    )
