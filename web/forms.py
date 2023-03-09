@@ -54,3 +54,7 @@ class FavouriteGenreForm(forms.ModelForm):
     class Meta:
         model = FavouriteGenre
         fields = ('title',)
+
+
+class BookNoteFilterForm(forms.Form):
+    search = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Поиск'}), required=False)

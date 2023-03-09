@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from proreader.settings import MEDIA_ROOT
-from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm
+from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
+    BookNoteFilterForm
 from web.models import Book, BookTag, FavouriteGenre
 
 User = get_user_model()
@@ -14,13 +15,23 @@ User = get_user_model()
 def main_view(request):
     book_notes = Book.objects.filter(user=request.user).order_by('title')
     current_book = book_notes.filter(done=False).first()
+
+    filter_form = BookNoteFilterForm(request.GET)
+    filter_form.is_valid()
+    filters = filter_form.cleaned_data
+    if filters['search']:
+        book_notes = book_notes.filter(title__icontains=filters['search'])
+
+    total_count = book_notes.count()
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6)
     return render(request, 'web/main.html', {
         'book_notes': paginator.get_page(page_number),
         'MEDIA_ROOT': MEDIA_ROOT,
         'current_book': current_book,
-        'form': BookNoteForm()
+        'total_count': total_count,
+        'form': BookNoteForm(),
+        'filter_form': filter_form
     })
 
 
