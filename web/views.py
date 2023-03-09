@@ -25,6 +25,9 @@ def main_view(request):
     if filters['is_done'] is not None:
         book_notes = book_notes.filter(done=filters['is_done'])
 
+    if filters['genres'] != 'unknown':
+        book_notes = book_notes.filter(genre=filters['genres'])
+
     total_count = book_notes.count()
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6)
