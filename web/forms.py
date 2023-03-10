@@ -75,6 +75,7 @@ class BookNoteFilterForm(forms.Form):
     genres = forms.ChoiceField(
         choices=(
             ('', 'Любой'),
+            ('антиутопия', 'антиутопия'),
             ('фэнтези', 'фэнтези'),
             ('вестерн', 'вестерн'),
             ('драма', 'драма'),

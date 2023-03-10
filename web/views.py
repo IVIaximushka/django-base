@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count, F, Q, Max
+from django.db.models import Count, Q, Max
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
@@ -8,6 +8,7 @@ from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
     BookNoteFilterForm
 from web.models import Book, BookTag, FavouriteGenre
+from web.services import filter_book_notes
 
 User = get_user_model()
 
@@ -19,22 +20,14 @@ def main_view(request):
 
     filter_form = BookNoteFilterForm(request.GET)
     filter_form.is_valid()
-    filters = filter_form.cleaned_data
-    if filters['search']:
-        book_notes = book_notes.filter(title__icontains=filters['search'])
-
-    if filters['is_done'] is not None:
-        book_notes = book_notes.filter(done=filters['is_done'])
-
-    if filters['genres']:
-        book_notes = book_notes.filter(genre=filters['genres'])
+    book_notes = filter_book_notes(book_notes, filter_form.cleaned_data)
 
     total_count = book_notes.count()
     book_notes = book_notes.prefetch_related('tags').select_related('user').annotate(
         tags_count=Count('tags')
     )
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(book_notes, per_page=6000)
+    paginator = Paginator(book_notes, per_page=6)
     return render(request, 'web/main.html', {
         'book_notes': paginator.get_page(page_number),
         'MEDIA_ROOT': MEDIA_ROOT,
@@ -47,7 +40,7 @@ def main_view(request):
 
 @login_required
 def analytics_view(request):
-    overall_stat = Book.objects.aggregate(count=Count('id'))
+    overall_stat = Book.objects.filter(user=request.user).aggregate(count=Count('id'))
     genre_stat = (
         Book.objects
         .values('genre')
