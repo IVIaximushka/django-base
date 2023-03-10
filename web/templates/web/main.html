@@ -40,10 +40,13 @@
                                 </p>
                                 <p><i>Автор: {{ book_note.author }}</i></p>
                                 <p>Жанр: {{ book_note.genre }}</p>
-                                {% if book_note.tags.all %}
-                                    <small>Теги:
-                                    [{% for tag in book_note.tags.all %}{{ tag.title }} {% endfor %}]</small>
-                                {% endif %}
+                                <small>
+                                    {% if book_note.tags.all %}
+                                        Теги:
+                                        [{% for tag in book_note.tags.all %}{{ tag.title }} {% endfor %}]<br>
+                                    {% endif %}
+                                    Пользователь: {{ book_note.user.username }}
+                                </small>
                                 <p><small>Описание: {{ book_note.description }}</small></p>
                                 <p><small>
                                     <a href="{% url 'book_edit' book_note.id %}">Изменить</a>

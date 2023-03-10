@@ -29,7 +29,7 @@ def main_view(request):
         book_notes = book_notes.filter(genre=filters['genres'])
 
     total_count = book_notes.count()
-    book_notes = book_notes.prefetch_related('tags')
+    book_notes = book_notes.prefetch_related('tags').select_related('user')
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6000)
     return render(request, 'web/main.html', {
