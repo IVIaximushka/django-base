@@ -1,14 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q, Max
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
-    BookNoteFilterForm
+    BookNoteFilterForm, ImportForm
 from web.models import Book, BookTag, FavouriteGenre
-from web.services import filter_book_notes
+from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv
 
 User = get_user_model()
 
@@ -26,8 +27,17 @@ def main_view(request):
     book_notes = book_notes.prefetch_related('tags').select_related('user').annotate(
         tags_count=Count('tags')
     )
+
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6)
+
+    if request.GET.get('export') == 'csv':
+        response = HttpResponse(
+            content_type='text/csv',
+            headers={'Content-Disposition': 'attachment; filename=book_notes.csv'}
+        )
+        return export_book_notes_as_csv(book_notes, response)
+
     return render(request, 'web/main.html', {
         'book_notes': paginator.get_page(page_number),
         'MEDIA_ROOT': MEDIA_ROOT,
@@ -35,6 +45,18 @@ def main_view(request):
         'total_count': total_count,
         'form': BookNoteForm(),
         'filter_form': filter_form
+    })
+
+
+@login_required
+def import_view(request):
+    if request.method == 'POST':
+        form = ImportForm(files=request.FILES)
+        if form.is_valid():
+            import_book_notes_from_csv(form.cleaned_data['file'], request.user.id)
+            return redirect('main')
+    return render(request, 'web/import.html', {
+        'form': ImportForm()
     })
 
 
