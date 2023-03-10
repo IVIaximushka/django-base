@@ -86,3 +86,7 @@ class BookNoteFilterForm(forms.Form):
         required=False,
         label='Жанр:'
     )
+
+
+class ImportForm(forms.Form):
+    file = forms.FileField()

@@ -7,9 +7,9 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
-    BookNoteFilterForm
+    BookNoteFilterForm, ImportForm
 from web.models import Book, BookTag, FavouriteGenre
-from web.services import filter_book_notes, export_book_notes_as_csv
+from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv
 
 User = get_user_model()
 
@@ -45,6 +45,18 @@ def main_view(request):
         'total_count': total_count,
         'form': BookNoteForm(),
         'filter_form': filter_form
+    })
+
+
+@login_required
+def import_view(request):
+    if request.method == 'POST':
+        form = ImportForm(files=request.FILES)
+        if form.is_valid():
+            import_book_notes_from_csv(form.cleaned_data['file'], request.user.id)
+            return redirect('main')
+    return render(request, 'web/import.html', {
+        'form': ImportForm()
     })
 
 
