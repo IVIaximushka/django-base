@@ -54,3 +54,34 @@ class FavouriteGenreForm(forms.ModelForm):
     class Meta:
         model = FavouriteGenre
         fields = ('title',)
+
+
+class BookNoteFilterForm(forms.Form):
+    search = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Поиск'}),
+        required=False,
+        label='Название:'
+    )
+    is_done = forms.NullBooleanField(
+        widget=forms.Select(
+            choices=(
+                ('unknown', 'Неизвестно'),
+                ('true', 'Да'),
+                ('false', 'Нет')
+            )
+        ),
+        label='Прочитано:'
+    )
+    genres = forms.ChoiceField(
+        choices=(
+            ('', 'Любой'),
+            ('фэнтези', 'фэнтези'),
+            ('вестерн', 'вестерн'),
+            ('драма', 'драма'),
+            ('реализм', 'реализм'),
+            ('классика', 'классика'),
+            ('романтизм', 'романтизм')
+        ),
+        required=False,
+        label='Жанр:'
+    )

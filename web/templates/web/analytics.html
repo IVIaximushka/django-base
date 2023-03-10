@@ -1,0 +1,15 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h1>Аналитика</h1>
+    <p>Всего записей: <b>{{ overall_stat.count }}</b></p>
+    <b>Статистика по жанрам:</b>
+    <ul>
+        {% for genre in genre_stat %}
+            <li>
+                Всего записей жанра "{{ genre.genre }}" - {{ genre.count }}.
+                Из них прочитано - {{ genre.is_done_count }}.
+            </li>
+        {% endfor %}
+    </ul>
+    Самый популярный жанр - <b><i>{{ max_popular_genre.genre }}</i></b>
+{% endblock %}

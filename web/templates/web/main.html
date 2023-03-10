@@ -14,6 +14,16 @@
             <button>Сохранить</button>
         </form>
     {% endif %}
+    <form action="">
+        <b>Фильтры:</b><br>
+        {% for field in filter_form %}
+            {{ field.label }}
+            {{ field }}
+        {% endfor %}
+        <button>Найти</button>
+        <a href="?">Показать всё</a>
+    </form>
+    <small>Всего записей - {{ total_count }}. На этой странице - {{ book_notes|length }}.</small>
     {% if book_notes|length != 0 %}
         <h1>Заметки:</h1>
         <ul>
@@ -30,6 +40,13 @@
                                 </p>
                                 <p><i>Автор: {{ book_note.author }}</i></p>
                                 <p>Жанр: {{ book_note.genre }}</p>
+                                <small>
+                                    {% if book_note.tags.all %}
+                                        Всего тегов - {{ book_note.tags_count }}:
+                                        [{% for tag in book_note.tags.all %}{{ tag.title }} {% endfor %}]<br>
+                                    {% endif %}
+                                    Пользователь: {{ book_note.user.username }}
+                                </small>
                                 <p><small>Описание: {{ book_note.description }}</small></p>
                                 <p><small>
                                     <a href="{% url 'book_edit' book_note.id %}">Изменить</a>
@@ -47,4 +64,15 @@
             {% endfor %}
         </ul>
     {% endif %}
+    <nav>
+        {% if book_notes.has_previous %}
+            <a href="?page=1">В начало</a>
+            <a href="?page={{ book_notes.previous_page_number }}">Предыдущая страница</a>
+        {% endif %}
+        Страница {{ book_notes.number }} из {{ book_notes.paginator.num_pages }}
+        {% if book_notes.has_next %}
+            <a href="?page={{ book_notes.next_page_number }}">Следующая страница</a>
+            <a href="?page={{ book_notes.paginator.num_pages }}">В конец</a>
+        {% endif %}
+    </nav>
 {% endblock %}
