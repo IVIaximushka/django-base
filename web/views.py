@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count, F, Q
+from django.db.models import Count, F, Q, Max
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
@@ -50,17 +50,18 @@ def analytics_view(request):
     overall_stat = Book.objects.aggregate(count=Count('id'))
     genre_stat = (
         Book.objects
-        .annotate(book_genre=F('genre'))
-        .values('book_genre')
+        .values('genre')
         .annotate(
             count=Count('id'),
             is_done_count=Count('id', filter=Q(done=True))
         )
     )
-    print(genre_stat)
+    max_popular_genre = genre_stat.aggregate(max_count=Max('count'))
+    max_popular_genre = genre_stat.filter(count=max_popular_genre['max_count'])[0]
     return render(request, 'web/analytics.html', {
-        'overall_stat':overall_stat,
-        'genre_stat': genre_stat
+        'overall_stat': overall_stat,
+        'genre_stat': genre_stat,
+        'max_popular_genre': max_popular_genre
     })
 
 

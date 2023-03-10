@@ -6,9 +6,10 @@
     <ul>
         {% for genre in genre_stat %}
             <li>
-                Всего записей жанра "{{ genre.book_genre }}" - {{ genre.count }}.
+                Всего записей жанра "{{ genre.genre }}" - {{ genre.count }}.
                 Из них прочитано - {{ genre.is_done_count }}.
             </li>
         {% endfor %}
     </ul>
+    Самый популярный жанр - <b><i>{{ max_popular_genre.genre }}</i></b>
 {% endblock %}
