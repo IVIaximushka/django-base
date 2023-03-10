@@ -21,6 +21,7 @@
             {{ field }}
         {% endfor %}
         <button>Найти</button>
+        <button name="export" value="csv">Скачать в формате CSV</button>
         <a href="?">Показать всё</a>
     </form>
     <small>Всего записей - {{ total_count }}. На этой странице - {{ book_notes|length }}.</small>
