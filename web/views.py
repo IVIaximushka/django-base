@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
@@ -29,7 +30,9 @@ def main_view(request):
         book_notes = book_notes.filter(genre=filters['genres'])
 
     total_count = book_notes.count()
-    book_notes = book_notes.prefetch_related('tags').select_related('user')
+    book_notes = book_notes.prefetch_related('tags').select_related('user').annotate(
+        tags_count=Count('tags')
+    )
     page_number = request.GET.get('page', 1)
     paginator = Paginator(book_notes, per_page=6000)
     return render(request, 'web/main.html', {

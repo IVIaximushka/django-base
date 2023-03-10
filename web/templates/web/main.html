@@ -42,7 +42,7 @@
                                 <p>Жанр: {{ book_note.genre }}</p>
                                 <small>
                                     {% if book_note.tags.all %}
-                                        Теги:
+                                        Всего тегов - {{ book_note.tags_count }}:
                                         [{% for tag in book_note.tags.all %}{{ tag.title }} {% endfor %}]<br>
                                     {% endif %}
                                     Пользователь: {{ book_note.user.username }}
