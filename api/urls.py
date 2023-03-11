@@ -15,8 +15,9 @@ Including another URLconf
 """
 from django.urls import path
 
-from api.views import main_view
+from api.views import main_view, book_notes_view
 
 urlpatterns = [
-    path('', main_view, name='main')
+    path('', main_view, name='main'),
+    path('book_notes/', book_notes_view, name='book_notes')
 ]
