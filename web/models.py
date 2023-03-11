@@ -23,6 +23,13 @@ class Book(models.Model):
     tags = models.ManyToManyField(BookTag, verbose_name='Теги', blank=True)
     image = models.ImageField(upload_to="books/", null=True, blank=True, verbose_name='Картинка')
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'книга'
+        verbose_name_plural = 'книги'
+
 
 class FavouriteGenre(models.Model):
     title = models.CharField(max_length=20, verbose_name='Название')
