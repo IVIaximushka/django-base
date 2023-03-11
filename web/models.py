@@ -12,6 +12,10 @@ class BookTag(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = 'тег'
+        verbose_name_plural = 'теги'
+
 
 class Book(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')
@@ -22,6 +26,13 @@ class Book(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     tags = models.ManyToManyField(BookTag, verbose_name='Теги', blank=True)
     image = models.ImageField(upload_to="books/", null=True, blank=True, verbose_name='Картинка')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'книга'
+        verbose_name_plural = 'книги'
 
 
 class FavouriteGenre(models.Model):
