@@ -1,10 +1,10 @@
-from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from api.serializers import BookNoteSerializer
-from web.models import Book
+from api.serializers import BookNoteSerializer, TagSerializer
+from web.models import Book, BookTag
 
 
 @api_view(['GET'])
@@ -18,3 +18,11 @@ class BookNotesViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Book.objects.all().select_related('user').prefetch_related('tags').filter(user=self.request.user)
+
+
+class BookTagsViewSet(ListModelMixin, CreateModelMixin, GenericViewSet):
+    serializer_class = TagSerializer
+
+    def get_queryset(self):
+        return BookTag.objects.all().filter(user=self.request.user)
+

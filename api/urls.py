@@ -17,10 +17,11 @@ from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import SimpleRouter
 
-from api.views import main_view, BookNotesViewSet
+from api.views import main_view, BookNotesViewSet, BookTagsViewSet
 
 router = SimpleRouter()
 router.register('book_notes', BookNotesViewSet, basename='book_notes')
+router.register('book_tags', BookTagsViewSet, basename='book_tags')
 
 urlpatterns = [
     path('', main_view, name='main'),
