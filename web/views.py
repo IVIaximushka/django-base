@@ -10,7 +10,7 @@ from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
     BookNoteFilterForm, ImportForm
 from web.models import Book, BookTag, FavouriteGenre
-from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv
+from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv, get_stat
 
 User = get_user_model()
 
@@ -60,6 +60,11 @@ def import_view(request):
     return render(request, 'web/import.html', {
         'form': ImportForm()
     })
+
+
+@login_required
+def stat_view(request):
+    return render(request, 'web/stat.html', {'results': get_stat()})
 
 
 @login_required

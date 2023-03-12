@@ -1,5 +1,6 @@
 import csv
 
+from proreader.redis import get_redis_client
 from web.models import Book, BookTag
 
 
@@ -51,3 +52,11 @@ def import_book_notes_from_csv(file, user_id):
                 Book.tags.through(book_id=book.id, booktag_id=tags_map[tag])
             )
     Book.tags.through.objects.bulk_create(booknote_tags)
+
+
+def get_stat():
+    redis = get_redis_client()
+    keys = redis.keys('stat_*')
+    results = [(key.decode().replace('stat_', ''), redis.get(key).decode())
+               for key in keys]
+    return results
