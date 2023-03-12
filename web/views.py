@@ -4,16 +4,18 @@ from django.db.models import Count, Q, Max
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.views.decorators.cache import cache_page
 
 from proreader.settings import MEDIA_ROOT
 from web.forms import RegistrationForm, AuthorizationForm, BookNoteForm, BookTagForm, FavouriteGenreForm, \
     BookNoteFilterForm, ImportForm
 from web.models import Book, BookTag, FavouriteGenre
-from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv
+from web.services import filter_book_notes, export_book_notes_as_csv, import_book_notes_from_csv, get_stat
 
 User = get_user_model()
 
 
+@cache_page(10)
 @login_required
 def main_view(request):
     book_notes = Book.objects.filter(user=request.user).order_by('title')
@@ -29,7 +31,7 @@ def main_view(request):
     )
 
     page_number = request.GET.get('page', 1)
-    paginator = Paginator(book_notes, per_page=6)
+    paginator = Paginator(book_notes, per_page=600)
 
     if request.GET.get('export') == 'csv':
         response = HttpResponse(
@@ -58,6 +60,11 @@ def import_view(request):
     return render(request, 'web/import.html', {
         'form': ImportForm()
     })
+
+
+@login_required
+def stat_view(request):
+    return render(request, 'web/stat.html', {'results': get_stat()})
 
 
 @login_required

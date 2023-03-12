@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -51,7 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'proreader.debug.SqlPrintingMiddleware'
+    'proreader.middlewares.SqlPrintingMiddleware',
+    'proreader.middlewares.StatMiddleware'
 ]
 
 ROOT_URLCONF = 'proreader.urls'
@@ -81,11 +82,25 @@ WSGI_APPLICATION = 'proreader.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'proreader',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'NAME': os.environ.get("DB_NAME", 'proreader'),
+        'USER': os.environ.get("DB_USER", 'postgres'),
+        'PASSWORD': os.environ.get("DB_PASSWORD", '1234'),
+        'HOST': os.environ.get("DB_HOST", 'localhost'),
         'PORT': 5432
+    }
+}
+
+REDIS_HOST = os.environ.get("REDIS_HOST", "127.0.0.1")
+REDIS_DB = os.environ.get("REDIS_DB", 0)
+REDIS_PORT = 6379
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get("REDIS_CONNECTION", f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
