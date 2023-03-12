@@ -24,7 +24,7 @@ router.register('book_notes', BookNotesViewSet, basename='book_notes')
 router.register('book_tags', BookTagsViewSet, basename='book_tags')
 
 urlpatterns = [
-    path('', main_view, name='main'),
+    path('', main_view, name='main_api'),
     path('token/', obtain_auth_token, name='token'),
     *router.urls
 ]
